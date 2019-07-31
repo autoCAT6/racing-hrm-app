@@ -28,7 +28,8 @@ import java.net.URL;
                 connection.setRequestProperty("Accept", "*/*");
 
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put(params[0], params[1]);
+                jsonObject.put("timestamp", params[0]);
+                jsonObject.put("heartbeat", params[1]);
 
 
                 DataOutputStream os = new DataOutputStream(connection.getOutputStream());
