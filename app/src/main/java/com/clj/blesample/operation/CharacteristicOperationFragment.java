@@ -1,5 +1,5 @@
 package com.clj.blesample.operation;
-
+import com.clj.blesample.operation.PostHRM;
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.os.Build;
@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class CharacteristicOperationFragment extends Fragment {
 
@@ -39,9 +40,9 @@ public class CharacteristicOperationFragment extends Fragment {
     public static final int PROPERTY_WRITE_NO_RESPONSE = 3;
     public static final int PROPERTY_NOTIFY = 4;
     public static final int PROPERTY_INDICATE = 5;
-
     private LinearLayout layout_container;
     private List<String> childList = new ArrayList<>();
+    private PostHRM postHRM = new PostHRM();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,6 +54,8 @@ public class CharacteristicOperationFragment extends Fragment {
     private void initView(View v) {
         layout_container = (LinearLayout) v.findViewById(R.id.layout_container);
     }
+
+
 
     public void showData() {
         final BleDevice bleDevice = ((OperationActivity) getActivity()).getBleDevice();
@@ -253,6 +256,11 @@ public class CharacteristicOperationFragment extends Fragment {
                                                         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(Calendar.getInstance().getTime());
                                                         Integer decimal = new BigInteger(characteristic.getValue()).intValue();
                                                         addText(txt, timeStamp + " : " + decimal.toString());
+                                                        try {
+                                                            postHRM.execute(timeStamp, decimal.toString());
+                                                        } catch (Exception e) {
+                                                            System.out.println(e.getMessage());
+                                                        }
                                                     }
                                                 });
                                             }
