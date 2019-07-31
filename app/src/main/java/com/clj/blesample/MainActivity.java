@@ -189,18 +189,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             uuids = str_uuid.split(",");
         }
         UUID[] serviceUuids = null;
-        if (uuids != null && uuids.length > 0) {
-            serviceUuids = new UUID[uuids.length];
-            for (int i = 0; i < uuids.length; i++) {
-                String name = uuids[i];
-                String[] components = name.split("-");
-                if (components.length != 5) {
-                    serviceUuids[i] = null;
-                } else {
-                    serviceUuids[i] = UUID.fromString(uuids[i]);
-                }
-            }
-        }
+        serviceUuids = new UUID[1];
+        serviceUuids[0] = UUID.fromString("0000180d-0000-1000-8000-00805f9b34fb");
+//        if (uuids != null && uuids.length > 0) {
+//            serviceUuids = new UUID[uuids.length];
+//            for (int i = 0; i < uuids.length; i++) {
+//                String name = uuids[i];
+//                String[] components = name.split("-");
+//                if (components.length != 5) {
+//                    serviceUuids[i] = null;
+//                } else {
+//                    serviceUuids[i] = UUID.fromString(uuids[i]);
+//                }
+//            }
+//        }
 
         String[] names;
         String str_name = et_name.getText().toString();

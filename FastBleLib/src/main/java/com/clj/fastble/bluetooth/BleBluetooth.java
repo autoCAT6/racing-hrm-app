@@ -246,6 +246,7 @@ public class BleBluetooth {
 
         @Override
         public void handleMessage(Message msg) {
+            //处理 connect/disconnect/discover services
             switch (msg.what) {
                 case BleMsg.MSG_CONNECT_FAIL: {
                     disconnectGatt();

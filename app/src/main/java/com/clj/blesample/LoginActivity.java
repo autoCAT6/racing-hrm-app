@@ -1,6 +1,7 @@
 package com.clj.blesample;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -43,6 +44,13 @@ public class LoginActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //showConnectedDevice();
+        SharedPreferences sharedPref = getSharedPreferences("data",MODE_PRIVATE);
+        int number = sharedPref.getInt("isLogged", 0);
+        if (number != 0) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+
     }
 
     @Override
@@ -76,6 +84,10 @@ public class LoginActivity extends AppCompatActivity {
         String password = password_info.getText().toString();
         switch (password_check(username,password)){
             case R.string.CORRECT_INFO:
+                SharedPreferences sharedPref = getSharedPreferences("data",MODE_PRIVATE);
+                SharedPreferences.Editor prefEditor = sharedPref.edit();
+                prefEditor.putInt("isLogged",1);
+                prefEditor.commit();
                 Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                 startActivity(intent);
                 break;

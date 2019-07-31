@@ -25,7 +25,10 @@ import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
 import com.clj.fastble.utils.HexUtil;
 
+import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -247,7 +250,9 @@ public class CharacteristicOperationFragment extends Fragment {
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        addText(txt, HexUtil.formatHexString(characteristic.getValue(), true));
+                                                        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS").format(Calendar.getInstance().getTime());
+                                                        Integer decimal = new BigInteger(characteristic.getValue()).intValue();
+                                                        addText(txt, timeStamp + " : " + decimal.toString());
                                                     }
                                                 });
                                             }

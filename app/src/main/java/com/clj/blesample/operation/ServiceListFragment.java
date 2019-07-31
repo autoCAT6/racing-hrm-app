@@ -64,7 +64,10 @@ public class ServiceListFragment extends Fragment {
 
         mResultAdapter.clear();
         for (BluetoothGattService service : gatt.getServices()) {
-            mResultAdapter.addResult(service);
+            //只显示hrm service
+            if (service.getUuid().toString().equalsIgnoreCase("0000180d-0000-1000-8000-00805f9b34fb")) {
+                mResultAdapter.addResult(service);
+            }
         }
         mResultAdapter.notifyDataSetChanged();
     }
