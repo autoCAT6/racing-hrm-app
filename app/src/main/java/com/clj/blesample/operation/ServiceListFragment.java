@@ -43,17 +43,20 @@ public class ServiceListFragment extends Fragment {
         mResultAdapter = new ResultAdapter(getActivity());
         ListView listView_device = (ListView) v.findViewById(R.id.list_service);
         listView_device.setAdapter(mResultAdapter);
-        listView_device.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BluetoothGattService service = mResultAdapter.getItem(position);
-                ((OperationActivity) getActivity()).setBluetoothGattService(service);
-                ((OperationActivity) getActivity()).changePage(1);
-            }
-        });
+
+//        listView_device.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                BluetoothGattService service = mResultAdapter.getItem(position);
+//                ((OperationActivity) getActivity()).setBluetoothGattService(service);
+//                ((OperationActivity) getActivity()).changePage(1);
+//            }
+//        });
     }
 
+
     private void showData() {
+        //指定设备下的service
         BleDevice bleDevice = ((OperationActivity) getActivity()).getBleDevice();
         String name = bleDevice.getName();
         String mac = bleDevice.getMac();
@@ -97,7 +100,7 @@ public class ServiceListFragment extends Fragment {
 
         @Override
         public BluetoothGattService getItem(int position) {
-            if (position > bluetoothGattServices.size())
+            if (position > bluetoothGattServices.size() || bluetoothGattServices.size() == 0)
                 return null;
             return bluetoothGattServices.get(position);
         }

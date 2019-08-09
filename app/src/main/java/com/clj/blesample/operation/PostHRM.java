@@ -5,14 +5,14 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
 import java.io.DataOutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
-    public class PostHRM extends AsyncTask<String, Void, String> {
+public class PostHRM extends AsyncTask<String, Void, String> {
 
         public static final String POST_URL = "https://b0ienqfdf7.execute-api.cn-north-1.amazonaws.com.cn/beta/data";
 
@@ -20,6 +20,7 @@ import java.net.URL;
         protected String doInBackground(String... params) {
 
             try {
+                String timeStamp = new SimpleDateFormat("start == yyyy-MM-dd HH:mm:ss:SSS").format(Calendar.getInstance().getTime());
                 URL url = new URL(POST_URL);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -31,7 +32,6 @@ import java.net.URL;
                 jsonObject.put("timestamp", params[0]);
                 jsonObject.put("heartbeat", params[1]);
 
-
                 DataOutputStream os = new DataOutputStream(connection.getOutputStream());
                 os.writeBytes(jsonObject.toString());
                 os.flush();
@@ -39,7 +39,6 @@ import java.net.URL;
 
                 Log.i("STATUS", String.valueOf(connection.getResponseCode()));
                 Log.i("MSG" , connection.getResponseMessage());
-
                 connection.disconnect();
 
             } catch (Exception e) {

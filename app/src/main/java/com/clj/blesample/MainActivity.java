@@ -160,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onDetail(BleDevice bleDevice) {
+                //进入操作
                 if (BleManager.getInstance().isConnected(bleDevice)) {
                     Intent intent = new Intent(MainActivity.this, OperationActivity.class);
                     intent.putExtra(OperationActivity.KEY_DATA, bleDevice);

@@ -1,10 +1,16 @@
 package com.clj.blesample.operation;
 import com.clj.blesample.operation.PostHRM;
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
+import android.content.Context;
+import android.graphics.Path;
+import android.media.VolumeShaper;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
@@ -14,7 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import android.support.v4.app.Fragment;
 import com.clj.blesample.R;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleIndicateCallback;
@@ -43,11 +49,25 @@ public class CharacteristicOperationFragment extends Fragment {
     private LinearLayout layout_container;
     private List<String> childList = new ArrayList<>();
     private PostHRM postHRM = new PostHRM();
+//    private static OperationActivity mActivity;
+//    private BleDevice bleDevice;
+//
+//
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        mActivity =(OperationActivity) context;
+//        bleDevice = mActivity.getBleDevice();
+//    }
+//
+
+    //new->onCreateView
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_characteric_operation, null);
         initView(v);
+        showData();
         return v;
     }
 
@@ -55,14 +75,32 @@ public class CharacteristicOperationFragment extends Fragment {
         layout_container = (LinearLayout) v.findViewById(R.id.layout_container);
     }
 
-
-
     public void showData() {
-        final BleDevice bleDevice = ((OperationActivity) getActivity()).getBleDevice();
-        final BluetoothGattCharacteristic characteristic = ((OperationActivity) getActivity()).getCharacteristic();
-        final int charaProp = ((OperationActivity) getActivity()).getCharaProp();
-        String child = characteristic.getUuid().toString() + String.valueOf(charaProp);
+//        final BleDevice bleDevice = mActivity.getBleDevice();
+//        final BluetoothGattCharacteristic characteristic = mActivity.getCharacteristic();
+//        final int charaProp = mActivity.getCharaProp();
 
+        final BleDevice bleDevice = ((OperationActivity) getActivity()).getBleDevice();
+        BluetoothGatt gatt = BleManager.getInstance().getBluetoothGatt(bleDevice);
+        BluetoothGattService mService = null;
+        for (BluetoothGattService service : gatt.getServices()) {
+            //只显示hrm service
+            if (service.getUuid().toString().equalsIgnoreCase("0000180d-0000-1000-8000-00805f9b34fb")) {
+                mService = service;
+                break;
+            }
+        }
+
+        List<BluetoothGattCharacteristic> cList = new ArrayList<>();
+        for (BluetoothGattCharacteristic characteristic : mService.getCharacteristics()) {
+            cList.add(characteristic);
+        }
+        //TODO:需要确定是notify 这里直接取了第一个
+        final BluetoothGattCharacteristic characteristic = cList.get(0);
+        ((OperationActivity) getActivity()).setCharacteristic(characteristic);
+        ((OperationActivity) getActivity()).setCharaProp(CharacteristicOperationFragment.PROPERTY_NOTIFY);
+        final int charaProp = CharacteristicOperationFragment.PROPERTY_NOTIFY;
+        String child = characteristic.getUuid().toString() + String.valueOf(charaProp);
         for (int i = 0; i < layout_container.getChildCount(); i++) {
             layout_container.getChildAt(i).setVisibility(View.GONE);
         }

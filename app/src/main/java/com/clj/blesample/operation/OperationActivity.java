@@ -1,9 +1,12 @@
 package com.clj.blesample.operation;
 
 
+import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -34,10 +37,10 @@ public class OperationActivity extends AppCompatActivity implements Observer {
     private int currentPage = 0;
     private String[] titles = new String[3];
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_operation);
         initData();
         initView();
@@ -104,29 +107,23 @@ public class OperationActivity extends AppCompatActivity implements Observer {
                 getString(R.string.console)};
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void initPage() {
         prepareFragment();
-        changePage(0);
     }
 
     public void changePage(int page) {
-        currentPage = page;
-        toolbar.setTitle(titles[page]);
-        updateFragment(page);
-        if (currentPage == 1) {
-            ((CharacteristicListFragment) fragments.get(1)).showData();
-        } else if (currentPage == 2) {
-            ((CharacteristicOperationFragment) fragments.get(2)).showData();
-        }
+        toolbar.setTitle(titles[2]);
+        getSupportFragmentManager().beginTransaction().show(fragments.get(0)).commitNow();
+        ((CharacteristicOperationFragment)getSupportFragmentManager().getFragments().get(0)).showData() ;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void prepareFragment() {
-        fragments.add(new ServiceListFragment());
-        fragments.add(new CharacteristicListFragment());
-        fragments.add(new CharacteristicOperationFragment());
-        for (Fragment fragment : fragments) {
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment, fragment).hide(fragment).commit();
-        }
+        //sync this
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment, new CharacteristicOperationFragment()).commitNow();
+//        getSupportFragmentManager().beginTransaction().show(((CharacteristicOperationFragment)getSupportFragmentManager().getFragments().get(0)));
+//        ((CharacteristicOperationFragment)getSupportFragmentManager().getFragments().get(0)).showData() ;
     }
 
     private void updateFragment(int position) {
@@ -141,7 +138,7 @@ public class OperationActivity extends AppCompatActivity implements Observer {
             } else {
                 transaction.hide(fragment);
             }
-            transaction.commit();
+            transaction.commitNow();
         }
     }
 

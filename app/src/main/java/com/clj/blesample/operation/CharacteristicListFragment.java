@@ -40,6 +40,11 @@ public class CharacteristicListFragment extends Fragment {
         mResultAdapter = new ResultAdapter(getActivity());
         ListView listView_device = (ListView) v.findViewById(R.id.list_service);
         listView_device.setAdapter(mResultAdapter);
+        showData();
+        ((OperationActivity) getActivity()).setCharacteristic(mResultAdapter.getItem(0));
+        ((OperationActivity) getActivity()).setCharaProp(CharacteristicOperationFragment.PROPERTY_NOTIFY);
+        //((OperationActivity) getActivity()).changePage(2);
+
         listView_device.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -47,26 +52,26 @@ public class CharacteristicListFragment extends Fragment {
                 final List<Integer> propList = new ArrayList<>();
                 List<String> propNameList = new ArrayList<>();
                 int charaProp = characteristic.getProperties();
-                if ((charaProp & BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
-                    propList.add(CharacteristicOperationFragment.PROPERTY_READ);
-                    propNameList.add("Read");
-                }
-                if ((charaProp & BluetoothGattCharacteristic.PROPERTY_WRITE) > 0) {
-                    propList.add(CharacteristicOperationFragment.PROPERTY_WRITE);
-                    propNameList.add("Write");
-                }
-                if ((charaProp & BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE) > 0) {
-                    propList.add(CharacteristicOperationFragment.PROPERTY_WRITE_NO_RESPONSE);
-                    propNameList.add("Write No Response");
-                }
+//                if ((charaProp & BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
+//                    propList.add(CharacteristicOperationFragment.PROPERTY_READ);
+//                    propNameList.add("Read");
+//                }
+//                if ((charaProp & BluetoothGattCharacteristic.PROPERTY_WRITE) > 0) {
+//                    propList.add(CharacteristicOperationFragment.PROPERTY_WRITE);
+//                    propNameList.add("Write");
+//                }
+//                if ((charaProp & BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE) > 0) {
+//                    propList.add(CharacteristicOperationFragment.PROPERTY_WRITE_NO_RESPONSE);
+//                    propNameList.add("Write No Response");
+//                }
                 if ((charaProp & BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
                     propList.add(CharacteristicOperationFragment.PROPERTY_NOTIFY);
                     propNameList.add("Notify");
                 }
-                if ((charaProp & BluetoothGattCharacteristic.PROPERTY_INDICATE) > 0) {
-                    propList.add(CharacteristicOperationFragment.PROPERTY_INDICATE);
-                    propNameList.add("Indicate");
-                }
+//                if ((charaProp & BluetoothGattCharacteristic.PROPERTY_INDICATE) > 0) {
+//                    propList.add(CharacteristicOperationFragment.PROPERTY_INDICATE);
+//                    propNameList.add("Indicate");
+//                }
 
                 if (propList.size() > 1) {
                     new AlertDialog.Builder(getActivity())
@@ -81,8 +86,9 @@ public class CharacteristicListFragment extends Fragment {
                             })
                             .show();
                 } else if (propList.size() > 0) {
+
                     ((OperationActivity) getActivity()).setCharacteristic(characteristic);
-                    ((OperationActivity) getActivity()).setCharaProp(propList.get(0));
+                    ((OperationActivity) getActivity()).setCharaProp(CharacteristicOperationFragment.PROPERTY_NOTIFY);
                     ((OperationActivity) getActivity()).changePage(2);
                 }
             }
@@ -90,6 +96,7 @@ public class CharacteristicListFragment extends Fragment {
     }
 
     public void showData() {
+        //显示特征（notify,read)
         BluetoothGattService service = ((OperationActivity) getActivity()).getBluetoothGattService();
         mResultAdapter.clear();
         for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
@@ -156,26 +163,26 @@ public class CharacteristicListFragment extends Fragment {
 
             StringBuilder property = new StringBuilder();
             int charaProp = characteristic.getProperties();
-            if ((charaProp & BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
-                property.append("Read");
-                property.append(" , ");
-            }
-            if ((charaProp & BluetoothGattCharacteristic.PROPERTY_WRITE) > 0) {
-                property.append("Write");
-                property.append(" , ");
-            }
-            if ((charaProp & BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE) > 0) {
-                property.append("Write No Response");
-                property.append(" , ");
-            }
+//            if ((charaProp & BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
+//                property.append("Read");
+//                property.append(" , ");
+//            }
+//            if ((charaProp & BluetoothGattCharacteristic.PROPERTY_WRITE) > 0) {
+//                property.append("Write");
+//                property.append(" , ");
+//            }
+//            if ((charaProp & BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE) > 0) {
+//                property.append("Write No Response");
+//                property.append(" , ");
+//            }
             if ((charaProp & BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
                 property.append("Notify");
                 property.append(" , ");
             }
-            if ((charaProp & BluetoothGattCharacteristic.PROPERTY_INDICATE) > 0) {
-                property.append("Indicate");
-                property.append(" , ");
-            }
+//            if ((charaProp & BluetoothGattCharacteristic.PROPERTY_INDICATE) > 0) {
+//                property.append("Indicate");
+//                property.append(" , ");
+//            }
             if (property.length() > 1) {
                 property.delete(property.length() - 2, property.length() - 1);
             }
